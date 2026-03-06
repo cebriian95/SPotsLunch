@@ -1,0 +1,101 @@
+<div class="min-h-screen bg-gradient-to-br from-red-200 to-red-50">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b border-red-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <h1 class="text-3xl font-bold text-[#da291c]">SPots</h1>
+            <p class="text-gray-600 mt-1">Sitios para ir a tragar
+                <br>
+                <span class="text-xs text-gray-500">V.1.0</span>
+            </p>
+        </div>
+        <div class="absolute top-6 right-6">
+            <button (click)="logout()" class="p-2  text-[#da291c] rounded-lg transition-colors" title="Logout">
+               <lucide-icon [img]="LogOut" class="text-[#da291c] w-5 h-5" />
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Grid de 2 columnas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <!-- Columna: Pendientes -->
+            <div class="bg-white rounded-lg shadow-md border border-red-100 p-6 hover:shadow-lg transition-shadow">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="w-2 h-2 bg-[#da291c] rounded-full mr-3"></span>
+                    Sitios Pendientes
+                </h2>
+                <div class="space-y-3 min-h-40 overflow-y-auto max-h-96">
+                    <!-- sitios pendientes -->
+                    @for (spot of pendingSpot(); track spot.id) {
+                    <div
+                        class="p-4 bg-red-50 rounded-lg border border-red-100 hover:bg-red-100 transition-colors cursor-pointer flex justify-between items-center">
+                        <div>
+                            <p class="font-medium text-gray-800">{{ spot.title }}</p>
+                            <p class="text-sm text-gray-600">{{ spot.location }}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button (click)="spots.markVisited(spot.id)" class="p-2 bg-[#da291c] hover:bg-red-600 text-white rounded-lg transition-colors"
+                                title="Marcar como visitado" >
+                                ✓
+                            </button>
+                            <button (click)="spots.deleteSpot(spot.id)" class="p-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg transition-colors"
+                                title="Borrar">
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                    } @empty {
+                    <p class="text-gray-500 italic">¿Sin sitios de tragar? <span class="not-italic">🤔</span></p>
+                    }
+                </div>
+            </div>
+
+            <!-- Columna: Visitados -->
+            <div class="bg-white rounded-lg shadow-md border border-green-100 p-6 hover:shadow-lg transition-shadow">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="w-2 h-2 bg-green-600 rounded-full mr-3"></span>
+                    Sitios Visitados
+                </h2>
+                <div class="space-y-3 min-h-40 overflow-y-auto max-h-96">
+                    <!-- sitios visitados -->
+                    @for (spot of visitedSpot(); track spot.id) {
+                    <div
+                        class="p-4 bg-green-50 rounded-lg border border-green-100 hover:bg-green-100 transition-colors cursor-pointer flex justify-between items-center">
+                        <div>
+                            <p class="font-medium text-gray-800">{{ spot.title }}</p>
+                            <p class="text-sm text-gray-600">{{ spot.location }}</p>
+                        </div>
+                        <button (click)="spots.deleteSpot(spot.id)" class="p-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg transition-colors"
+                            title="Borrar">
+                            ✕
+                        </button>
+                    </div>
+                    } @empty {
+                    <p class="text-gray-500 italic">Aun no fuimos a tragar.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón Añadir -->
+        <div class="flex justify-center md:justify-center">
+            <!-- Desktop: Botón completo (75%) -->
+            <button (click)="showSpotModal = true"
+                class="hidden md:flex w-3/4 bg-gradient-to-r from-[#da291c] to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 justify-center items-center gap-2">
+                <span class="text-2xl">+</span>
+                <span>Añadir</span>
+            </button>
+
+            <!-- Mobile: Solo el + icon a la izquierda -->
+            <button (click)="showSpotModal = true"
+                class="md:hidden w-14 h-14 bg-gradient-to-r from-[#da291c] to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex justify-center items-center text-3xl">
+                +
+            </button>
+        </div>
+    </div>
+    <!-- Modal para añadir sitio -->
+    @if (showSpotModal) {
+    <app-add-spot-modal (close)="showSpotModal = false"></app-add-spot-modal>
+    }
+</div>
