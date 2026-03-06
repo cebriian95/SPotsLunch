@@ -1,9 +1,9 @@
 const fs = require('fs');
 
 const content = `export const environment = {
-  supabaseUrl: '${process.env.SUPABASE_URL}',
-  supabaseKey: '${process.env.SUPABASE_KEY}',
-  password: '${process.env.PASSWORD}'
+  supabaseUrl: '${process.env.supabaseUrl}',
+  supabaseKey: '${process.env.supabaseKey}',
+  password: '${process.env.password}'
 };
 `;
 fs.mkdirSync('./src/environments', { recursive: true });
