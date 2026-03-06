@@ -6,6 +6,6 @@ const content = `export const environment = {
   password: '${process.env.PASSWORD}'
 };
 `;
-
+fs.mkdirSync('./src/environments', { recursive: true });
 fs.writeFileSync('./src/environments/environment.ts', content);
 console.log('environment.ts generado correctamente');
