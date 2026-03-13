@@ -1,5 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Supabase } from './supabase';
+import { Spot } from '../models/spot.model';
+
+
 
 
 @Injectable({
@@ -9,7 +12,7 @@ export class Spots {
 
   supabase = inject(Supabase);
 
-  spots = signal<any[]>([]);
+  spots = signal<Spot[]>([]);
 
   constructor() {
     this.getSpots();
@@ -40,9 +43,11 @@ export class Spots {
   }
 
   async deleteSpot(id: string) {
-    const { error } = await this.supabase.client.from('spots').delete().eq('id', id);
-    if (error) {
-      console.error('Error eliminando spot:', error);
+    if (confirm('¿Estás seguro de que quieres eliminar este sitio?')) {
+      const { error } = await this.supabase.client.from('spots').delete().eq('id', id);
+      if (error) {
+        console.error('Error eliminando spot:', error);
+      }
     }
   }
 

@@ -5,12 +5,12 @@
             <h1 class="text-3xl font-bold text-[#da291c]">SPots</h1>
             <p class="text-gray-600 mt-1">Sitios para ir a tragar
                 <br>
-                <span class="text-xs text-gray-500">V.1.0.1</span>
+                <span class="text-xs text-gray-500">V.1.5.0</span>
             </p>
         </div>
         <div class="absolute top-6 right-6">
             <button (click)="logout()" class="p-2  text-[#da291c] rounded-lg transition-colors" title="Logout">
-               <lucide-icon [img]="LogOut" class="text-[#da291c] w-5 h-5" />
+                <lucide-icon [img]="LogOut" class="text-[#da291c] w-5 h-5" />
             </button>
         </div>
     </div>
@@ -28,22 +28,35 @@
                 <div class="space-y-3 min-h-40 overflow-y-auto max-h-96">
                     <!-- sitios pendientes -->
                     @for (spot of pendingSpot(); track spot.id) {
-                    <div
-                        class="p-4 bg-red-50 rounded-lg border border-red-100 hover:bg-red-100 transition-colors cursor-pointer flex justify-between items-center">
-                        <div>
-                            <p class="font-medium text-gray-800">{{ spot.title }}</p>
-                            <p class="text-sm text-gray-600">{{ spot.location }}</p>
+                    <div class="bg-red-50 rounded-lg border border-red-100 overflow-hidden">
+                        <!-- Cabecera clickable -->
+                        <div (click)="toggleSpot(spot.id)"
+                            class="p-4 hover:bg-red-100 transition-colors cursor-pointer flex justify-between items-center">
+                            <div>
+                                <p class="font-medium text-gray-800">{{ spot.title }}</p>
+                                <p class="text-sm text-gray-600">{{ spot.location }}</p>
+                            </div>
                         </div>
-                        <div class="flex gap-2">
-                            <button (click)="spots.markVisited(spot.id)" class="p-2 bg-[#da291c] hover:bg-red-600 text-white rounded-lg transition-colors"
-                                title="Marcar como visitado" >
-                                ✓
-                            </button>
-                            <button (click)="spots.deleteSpot(spot.id)" class="p-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg transition-colors"
-                                title="Borrar">
-                                ✕
-                            </button>
+                        <!-- Parte expandida -->
+                        @if (expandedSpotId === spot.id) {
+                        <div class="border-t border-red-200 p-4 bg-white">
+
+                            <div class="flex flex-row gap-3">
+                                <div class="flex">
+                                    <button (click)="spots.deleteSpot(spot.id)" type="button"
+                                        class="w-full h-full p-2 bg-[#da291c] hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors"
+                                        title="Eliminar sitio">
+                                        <lucide-icon [img]="Trash2" class="w-5 h-5" />
+                                    </button>
+                                </div>
+                                <button (click)="spots.markVisited(spot.id)"
+                                    class="w-full py-2 bg-[#da291c] hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors">
+                                    ✓ Marcar como visitado
+                                </button>
+                            </div>
                         </div>
+
+                        }
                     </div>
                     } @empty {
                     <p class="text-gray-500 italic">¿Sin sitios de tragar? <span class="not-italic">🤔</span></p>
@@ -58,18 +71,74 @@
                     Sitios Visitados
                 </h2>
                 <div class="space-y-3 min-h-40 overflow-y-auto max-h-96">
-                    <!-- sitios visitados -->
                     @for (spot of visitedSpot(); track spot.id) {
                     <div
-                        class="p-4 bg-green-50 rounded-lg border border-green-100 hover:bg-green-100 transition-colors cursor-pointer flex justify-between items-center">
-                        <div>
-                            <p class="font-medium text-gray-800">{{ spot.title }}</p>
-                            <p class="text-sm text-gray-600">{{ spot.location }}</p>
+                        class="rounded-lg border overflow-hidden {{ ratingTheme(spot.id).cardBg }} {{ ratingTheme(spot.id).cardBorder }}">
+                        <!-- Cabecera clickable -->
+                        <div (click)="toggleSpot(spot.id)"
+                            class="p-4 transition-colors cursor-pointer flex justify-between items-center {{ ratingTheme(spot.id).headerHover }}">
+                            <div>
+                                <p class="font-medium text-gray-800">{{ spot.title }}</p>
+                                <p class="text-sm text-gray-600">{{ spot.location }}</p>
+                            </div>
+                            <span
+                                class="text-lg font-bold {{ ratingTheme(spot.id).scoreText }}">{{averageRating(spot.id)}}<span
+                                    class="text-sm font-normal text-gray-400">/10</span></span>
                         </div>
-                        <button (click)="spots.deleteSpot(spot.id)" class="p-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg transition-colors"
-                            title="Borrar">
-                            ✕
-                        </button>
+                        <!-- Parte expandida -->
+                        @if (expandedSpotId === spot.id) {
+                        <div class="border-t p-4 bg-white space-y-4 {{ ratingTheme(spot.id).expandedBorder }}">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm text-gray-500">Notas:</span>
+                            </div>
+                            <!-- Lista de notas existentes -->
+                            @for (score of rating.ratings().filter(rating => rating.spot_id === spot.id); track
+                            score.id) {
+                            <div class="space-y-2">
+                                <div
+                                    class="flex justify-between items-center rounded-lg px-3 py-2  {{ noteTheme(score.score) }}">
+                                    <span class="text-sm font-medium text-gray-900">{{ score.nickname }}</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-bold text-gray-800">{{ score.score}}/10</span>
+                                        <button (click)="rating.deleteRating(score.id)"
+                                            class="text-gray-700 hover:text-red-400 transition-colors">
+                                            <lucide-icon [img]="Trash2" class="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            } @empty {
+                            <p class="text-gray-500 italic">Aun no hay notas para este sitio.</p>
+                            }
+
+                            <!-- Formulario añadir nota -->
+                            <form (ngSubmit)="addRating(spot.id)">
+                                <div class="border-t border-gray-100 pt-3 space-y-2">
+                                    <div class="flex gap-2">
+                                        <input type="text" placeholder="Tu nombre" [(ngModel)]="nickname"
+                                            name="nickname"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+                                        <input type="number" min="0" max="10" placeholder="0-10" [(ngModel)]="nota"
+                                            name="nota"
+                                            class="w-30 px-2 py-2 border border-gray-300 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-green-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                                    </div>
+                                    <div class="flex flex-row gap-3">
+                                        <div class="flex">
+                                            <button (click)="spots.deleteSpot(spot.id)" type="button"
+                                                class="w-full h-full p-2 bg-[#da291c] hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors"
+                                                title="Eliminar sitio">
+                                                <lucide-icon [img]="Trash2" class="w-5 h-5" />
+                                            </button>
+                                        </div>
+                                        <button type="submit"
+                                            class="w-full py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors ">
+                                            + Añadir nota
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        }
                     </div>
                     } @empty {
                     <p class="text-gray-500 italic">Aun no fuimos a tragar.</p>

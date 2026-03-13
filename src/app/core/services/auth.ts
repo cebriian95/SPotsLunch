@@ -22,4 +22,12 @@ export class Auth {
     localStorage.removeItem('isAuthenticated');
   }
 
+  nicknameStorage(nickname: string): void {
+    localStorage.setItem('nickname', nickname);
+  }
+
+  getNickname(): string | null {
+    return localStorage.getItem('nickname');
+  }
+
 }
