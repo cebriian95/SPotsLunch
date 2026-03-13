@@ -5,7 +5,7 @@
             <h1 class="text-3xl font-bold text-[#da291c]">SPots</h1>
             <p class="text-gray-600 mt-1">Sitios para ir a tragar
                 <br>
-                <span class="text-xs text-gray-500">V.1.5.0</span>
+                <span class="text-xs text-gray-500">V.1.5.2</span>
             </p>
         </div>
         <div class="absolute top-6 right-6">
@@ -28,10 +28,10 @@
                 <div class="space-y-3 min-h-40 overflow-y-auto max-h-96">
                     <!-- sitios pendientes -->
                     @for (spot of pendingSpot(); track spot.id) {
-                    <div class="bg-red-50 rounded-lg border border-red-100 overflow-hidden">
+                    <div class="bg-gray-100 rounded-lg border border-gray-200 overflow-hidden">
                         <!-- Cabecera clickable -->
                         <div (click)="toggleSpot(spot.id)"
-                            class="p-4 hover:bg-red-100 transition-colors cursor-pointer flex justify-between items-center">
+                            class="p-4 hover:bg-gray-200 transition-colors cursor-pointer flex justify-between items-center">
                             <div>
                                 <p class="font-medium text-gray-800">{{ spot.title }}</p>
                                 <p class="text-sm text-gray-600">{{ spot.location }}</p>
@@ -39,8 +39,7 @@
                         </div>
                         <!-- Parte expandida -->
                         @if (expandedSpotId === spot.id) {
-                        <div class="border-t border-red-200 p-4 bg-white">
-
+                        <div class="border-t border-gray-200 p-4 bg-white">
                             <div class="flex flex-row gap-3">
                                 <div class="flex">
                                     <button (click)="spots.deleteSpot(spot.id)" type="button"
@@ -50,12 +49,11 @@
                                     </button>
                                 </div>
                                 <button (click)="spots.markVisited(spot.id)"
-                                    class="w-full py-2 bg-[#da291c] hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors">
+                                    class="w-full py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
                                     ✓ Marcar como visitado
                                 </button>
                             </div>
                         </div>
-
                         }
                     </div>
                     } @empty {
