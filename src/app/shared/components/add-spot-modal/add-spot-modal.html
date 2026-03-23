@@ -1,6 +1,12 @@
 <div class="fixed inset-0 bg-[#da291cb1] flex items-center justify-center">
     <div class="bg-white rounded-lg shadow-lg p-6 w-96">
-        <h2 class="text-2xl font-bold text-[#da291c] mb-6">Añadir SPot</h2>
+        <h2 class="text-2xl font-bold text-[#da291c] mb-6">
+            @if (spot) {
+                Editar SPot
+            }@else {
+                Añadir SPot
+            }
+        </h2>
 
         <form class="space-y-4">
             <div>
@@ -14,8 +20,8 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Ubicación*</label>
-                <input type="text" placeholder="Ubicación" name="location" [(ngModel)]="location" [class.border-[#da291c]]="locationError"
+                <label class="block text-sm font-medium text-gray-700 mb-2">Ciudad*</label>
+                <input type="text" placeholder="Ciudad" name="location" [(ngModel)]="location" [class.border-[#da291c]]="locationError"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#da291c]"
                     maxlength="40"/>
                 @if(locationError) {
@@ -23,11 +29,25 @@
                 }
             </div>
 
+             <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Ubicación</label>
+                <input type="text" placeholder="Link Google maps" name="location_map" [(ngModel)]="location_map" [class.border-[#da291c]]="locationError"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#da291c]"
+                    maxlength="100"/>
+                @if(location_mapError) {
+                <p class="text-[#da291c] text-sm">{{ location_mapError }}</p>
+                }
+            </div><!--location_mapError-->
+
 
             <div class="flex gap-3 pt-4">
                 <button type="submit" (click)="createSpot()"
                     class="flex-1 bg-[#da291c] hover:bg-red-700 text-white font-semibold py-2 rounded-lg transition">
-                    Añadir
+                    @if (spot) {
+                        Editar
+                    }@else {
+                        Añadir
+                    }
                 </button>
                 <button type="button" (click)="cancel()"
                     class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 rounded-lg transition">

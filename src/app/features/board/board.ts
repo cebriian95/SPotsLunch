@@ -3,9 +3,10 @@ import { Spots } from '../../core/services/spots';
 import { AddSpotModal } from '../../shared/components/add-spot-modal/add-spot-modal';
 import { Auth } from '../../core/services/auth';
 import { Router } from '@angular/router';
-import { LucideAngularModule, LogOut, Trash2 } from 'lucide-angular';
+import { LucideAngularModule, LogOut, Trash2, MapPin, Pencil } from 'lucide-angular';
 import { Rating } from '../../core/services/rating';
 import { FormsModule } from "@angular/forms";
+import { Spot } from '../../core/models/spot.model';
 
 @Component({
   selector: 'app-board',
@@ -21,8 +22,12 @@ export class Board {
   rating = inject(Rating);
 
   showSpotModal = false;
+  spotToEdit?:Spot;
+
   readonly LogOut = LogOut;
   readonly Trash2 = Trash2;
+  readonly MapPin = MapPin;
+  readonly Pencil = Pencil;
 
   visitedSpot = computed(() => this.spots.spots().filter(spot => spot.visited));
   pendingSpot = computed(() => this.spots.spots().filter(spot => !spot.visited));
@@ -93,14 +98,18 @@ export class Board {
     };
   }
 
-
+  editSpot(spot:Spot){
+    this.spotToEdit = spot;
+    this.showSpotModal = true;
+  }
 
   addRating(spotId: string) {
     const yaExiste = this.rating.ratings()
       .filter(r => r.spot_id === spotId)
       .some(r => r.nickname.toLowerCase() === this.nickname.toLowerCase());
     if (!yaExiste) {
-      if (this.nickname.trim() === '' || this.nota <= 0 || this.nota > 10) {
+      const notaValida = this.nota >= 0 && this.nota <= 10 && Math.round(this.nota * 10) === this.nota * 10;
+      if (this.nickname.trim() === '' || !notaValida) {
         alert('introduce un nickname y una nota valida');
 
       } else {
@@ -118,9 +127,14 @@ export class Board {
 
   //funcionalidad para desplegamble
   expandedSpotId: string | null = null;
+  deletePopoverId: string | null = null;
 
   toggleSpot(id: string) {
     this.expandedSpotId = this.expandedSpotId === id ? null : id;
+  }
+
+  toggleDeletePopover(id: string) {
+    this.deletePopoverId = this.deletePopoverId === id ? null : id;
   }
 
 

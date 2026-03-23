@@ -28,10 +28,17 @@ export class Spots {
     }
   }
 
-  async addSpot(title: string, location: string) {
-    const { error } = await this.supabase.client.from('spots').insert({ title, location });
+  async addSpot(title: string, location: string, location_map: string) {
+    const { error } = await this.supabase.client.from('spots').insert({ title, location, location_map });
     if (error) {
       console.error('Error añadiendo spot:', error);
+    }
+  }
+
+  async updateSpot(id: string, title: string, location: string, location_map: string) {
+    const { error } = await this.supabase.client.from('spots').update({ title, location, location_map }).eq('id', id);
+    if (error) {
+      console.error('Error actualizando spot:', error);
     }
   }
 
@@ -43,21 +50,21 @@ export class Spots {
   }
 
   async deleteSpot(id: string) {
-    if (confirm('¿Estás seguro de que quieres eliminar este sitio?')) {
-      const { error } = await this.supabase.client.from('spots').delete().eq('id', id);
-      if (error) {
-        console.error('Error eliminando spot:', error);
-      }
+
+    const { error } = await this.supabase.client.from('spots').delete().eq('id', id);
+    if (error) {
+      console.error('Error eliminando spot:', error);
     }
+
   }
 
   subscribeToSpots() {
     this.supabase.client
-    .channel('spots')
-    .on('postgres_changes',
-       { event: '*', schema: 'public', table: 'spots' }, _ => {
-      this.getSpots();
-    }).subscribe();
-  } 
+      .channel('spots')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'spots' }, _ => {
+          this.getSpots();
+        }).subscribe();
+  }
 
 }
