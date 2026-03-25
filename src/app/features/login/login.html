@@ -1,12 +1,21 @@
 <div>
-    <div class="flex justify-center items-center min-h-screen bg-[#da291c]">
-        <div class="bg-white p-10 rounded-lg shadow-md w-full max-w-sm text-center ">
-            <h1 class="text-[#da291c] mb-7 text-2xl font-bold">Spot Lunch</h1>
+    <div class="login-bg flex justify-center items-center min-h-screen relative">
+        <!-- Dark mode toggle button -->
+        <button (click)="toggleTheme()" class="absolute top-6 right-6 p-2 text-white dark:text-gray-300 rounded-lg transition-colors hover:bg-gray-700 dark:hover:bg-gray-600" title="Toggle theme">
+            @if (themeService.isDarkMode()) {
+                <lucide-icon [img]="Sun" class="w-5 h-5" />
+            } @else {
+                <lucide-icon [img]="Moon" class="w-5 h-5" />
+            }
+        </button>
+        
+        <div class="bg-white dark:bg-gray-800 p-10 rounded-lg shadow-md w-full max-w-sm text-center ">
+            <h1 class="text-red-600 dark:text-red-400 mb-7 text-2xl font-bold">Spot Lunch</h1>
 
             <form (ngSubmit)="onLogin()">
                 <div class="mb-5">
                     <input type="password" [(ngModel)]="password" name="password" placeholder="Contraseña" required
-                        class="w-full px-3 py-3 border-2 border-gray-300 rounded text-base transition-colors focus:outline-none focus:border-[#da291c]" />
+                        class="w-full px-3 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded text-base transition-colors focus:outline-none focus:border-red-600 dark:focus:border-red-400" />
                 </div>
                 @if (errorMessage) {
                 <div class=" bg-red-500 text-white px-2 py-1.5 mb-3 rounded-lg shadow-md">
@@ -14,7 +23,7 @@
                 </div>
                 }
                 <button type="submit"
-                    class="w-full py-3 bg-[#da291c] text-white border-none rounded text-base font-bold cursor-pointer transition-colors hover:bg-[#b8220f]">
+                    class="w-full py-3 bg-red-600 hover:bg-red-700 text-white border-none rounded text-base font-bold cursor-pointer transition-colors">
                     Entrar
                 </button>
             </form>
