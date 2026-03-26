@@ -23,10 +23,6 @@ export class Login {
   readonly Sun = Sun;
   readonly Moon = Moon;
 
-  toggleTheme() {
-    this.themeService.toggleTheme();
-  }
-
   onLogin() {
     if (this.auth.checkPassword(this.password)) {
       this.router.navigate(['/board']);

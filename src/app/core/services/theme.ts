@@ -14,7 +14,7 @@ export class ThemeService {
 
   private initializeTheme(): void {
     const stored = localStorage.getItem(this.STORAGE_KEY);
-    const isDark = stored ? JSON.parse(stored) : false;
+    const isDark = stored ? JSON.parse(stored) : window.matchMedia('(prefers-color-scheme: dark)').matches;
     this.isDarkMode.set(isDark);
     this.applyTheme();
   }

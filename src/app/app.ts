@@ -12,7 +12,4 @@ export class App {
   protected readonly title = signal('spots-lunch');
   private themeService = inject(ThemeService);
 
-  constructor() {
-    // El servicio se inicializa automáticamente al inyectarlo
-  }
 }

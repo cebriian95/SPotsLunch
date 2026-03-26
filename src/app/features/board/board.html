@@ -9,7 +9,7 @@
             </p>
         </div>
         <div class="absolute top-6 right-6 flex gap-2">
-            <button (click)="toggleTheme()" class="p-2 text-gray-600 dark:text-gray-300 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700" title="Toggle theme">
+            <button (click)="themeService.toggleTheme()" class="p-2 text-gray-600 dark:text-gray-300 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700" title="Toggle theme">
                 @if (themeService.isDarkMode()) {
                     <lucide-icon [img]="Sun" class="w-5 h-5" />
                 } @else {
@@ -109,8 +109,7 @@
                 </h2>
                 <div class="space-y-3 min-h-40 overflow-y-auto max-h-96">
                     @for (spot of visitedSpot(); track spot.id) {
-                    <div
-                        class="rounded-lg border overflow-hidden {{ ratingTheme(spot.id).cardBg }} {{ ratingTheme(spot.id).cardBorder }}">
+                    <div [class]="ratingTheme(spot.id).cardBg + ' ' + ratingTheme(spot.id).cardBorder + ' rounded-lg border overflow-hidden'">
                         <!-- Cabecera clickable -->
                         <div (click)="toggleSpot(spot.id)"
                             class="p-4 transition-colors cursor-pointer flex justify-between items-center {{ ratingTheme(spot.id).headerHover }}">

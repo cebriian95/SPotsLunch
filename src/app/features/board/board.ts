@@ -36,10 +36,6 @@ export class Board {
   readonly Sun = Sun;
   readonly Moon = Moon;
 
-  toggleTheme() {
-    this.themeService.toggleTheme();
-  }
-
   visitedSpot = computed(() => this.spots.spots().filter(spot => spot.visited));
   pendingSpot = computed(() => this.spots.spots().filter(spot => !spot.visited));
 
